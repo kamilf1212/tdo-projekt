@@ -2,8 +2,8 @@ from fastapi import FastAPI, Request
 from pathlib import Path
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from routers import books
-from database import Base, engine
+from app.routers import books
+from app.database import Base, engine
 import os
 
 Base.metadata.create_all(bind=engine)

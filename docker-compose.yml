@@ -1,0 +1,6 @@
+services:
+  app:
+    build: .
+    container_name: my_app
+    ports:
+      - "8000:8000"
