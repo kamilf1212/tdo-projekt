@@ -4,3 +4,9 @@ services:
     container_name: my_app
     ports:
       - "8000:8000"
+    volumes:
+      - data:/data
+    environment:
+      - DATABASE_URL=sqlite:////data/sqlite/dev.db
+volumes:
+  data:
