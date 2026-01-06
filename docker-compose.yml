@@ -33,6 +33,10 @@ services:
       - "9113:9113"
     depends_on:
       - nginx
+  grafana:
+    image: grafana/grafana
+    ports: 
+      - "3000:3000"
 
 volumes:
   data:
