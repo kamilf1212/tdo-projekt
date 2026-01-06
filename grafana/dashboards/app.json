@@ -23,8 +23,7 @@
   "panels": [
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "df9dg5n19ue4gc"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -106,8 +105,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "df9dg5n19ue4gc"
+            "type": "prometheus"
           },
           "editorMode": "builder",
           "expr": "sum(rate(nginx_http_requests_total[1m]))",
@@ -121,8 +119,7 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "df9dg5n19ue4gc"
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {

@@ -39,6 +39,7 @@ services:
       - "3000:3000"
     volumes:
      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+     - ./grafana/provisioning:/etc/grafana/provisioning/datasources
 
 volumes:
   data:
