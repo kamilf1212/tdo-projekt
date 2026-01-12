@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>LibraryLite</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Dodaj książkę</h1>
+
+    <form method="post" action="/add-book">
+        <label>
+            Tytuł:
+            <input type="text" name="title" required>
+        </label>
+        <br><br>
+
+        <label>
+            Autor:
+            <input type="text" name="author" required>
+        </label>
+        <br><br>
+
+        <label>
+            Opis:
+            <textarea name="description"></textarea>
+        </label>
+        <br><br>
+
+        <label>
+            Rok:
+            <input type="number" name="year">
+        </label>
+        <br><br>
+
+        <button type="submit">Dodaj książkę</button>
+    </form>
+</body>
+</html>

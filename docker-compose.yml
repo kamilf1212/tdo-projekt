@@ -1,7 +1,6 @@
 services:
   app:
     build: .
-    container_name: my_app
     expose:
       - "8000"
     volumes:

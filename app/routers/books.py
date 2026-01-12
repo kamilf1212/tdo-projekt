@@ -15,7 +15,7 @@ def get_db():
         db.close()
 
 
-@router.get("/")
+@router.get("")
 def list_books(db: Session = Depends(get_db)):
     return db.query(models.Book).all()
 
