@@ -29,7 +29,7 @@ def get_book(book_id: int,db: Session = Depends(get_db)):
     return book
 
 
-@router.post("/", response_model=schemas.Book)
+@router.post("/")
 def create_book(book: schemas.BookCreate, db: Session = Depends(get_db)):
     obj = models.Book(title=book.title)
     db.add(obj)
