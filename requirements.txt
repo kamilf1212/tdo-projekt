@@ -1,7 +1,9 @@
-fastapi
+fastapi~=0.128.0
 uvicorn[standard]
-sqlalchemy
+sqlalchemy~=2.0.45
 psycopg2-binary
 jinja2
-python-dotenv
+python-dotenv~=1.2.1
 python-multipart
+starlette~=0.50.0
+pydantic~=2.12.5

@@ -1,14 +1,13 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Form
 from pathlib import Path
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from starlette.responses import HTMLResponse
 from app.routers import books
-from app.database import Base, engine
+from app.database import Base, engine, SessionLocal
 import os
-from fastapi import Form
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
-from app.database import SessionLocal
 from app import models
 
 Base.metadata.create_all(bind=engine)
@@ -34,12 +33,7 @@ def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/add-book")
-def add_book(
-    title: str = Form(...),
-    author: str = Form(...),
-    description: str | None = Form(None),
-    year: int | None = Form(None)
-):
+def add_book(title: str = Form(...), author: str = Form(...), description: str | None = Form(None), year: int | None = Form(None)):
     db: Session = SessionLocal()
     try:
         book = models.Book(
@@ -58,6 +52,58 @@ def add_book(
 @app.get("/add-book")
 def add_book_form(request: Request):
     return templates.TemplateResponse("add_book.html", {"request": request})
+
+@app.get("/books-list")
+def books_list(request: Request):
+    db = SessionLocal()
+    try:
+        books = db.query(models.Book).all()
+    finally:
+        db.close()
+
+    return templates.TemplateResponse("books.html", {"request": request, "books": books})
+
+@app.get("/edit-book/{book_id}")
+def edit_book_form(book_id: int, request: Request):
+    db = SessionLocal()
+    try:
+        book = db.query(models.Book).filter(models.Book.id == book_id).first()
+    finally:
+        db.close()
+
+    if not book:
+        return HTMLResponse(content="Book not found", status_code=404)
+
+    return templates.TemplateResponse("edit_book.html", {"request": request, "book": book})
+
+@app.post("/edit-book/{book_id}")
+def edit_book(book_id: int, title: str = Form(...), author: str = Form(...), description: str | None = Form(None), year: int | None = Form(None)):
+    db = SessionLocal()
+    try:
+        book = db.query(models.Book).filter(models.Book.id == book_id).first()
+        if book:
+            book.title = title
+            book.author = author
+            book.description = description
+            book.year = year
+            db.commit()
+    finally:
+        db.close()
+
+    return RedirectResponse(url="/books-list", status_code=303)
+
+@app.post("/delete-book/{book_id}")
+def delete_book(book_id: int):
+    db = SessionLocal()
+    try:
+        book = db.query(models.Book).filter(models.Book.id == book_id).first()
+        if book:
+            db.delete(book)
+            db.commit()
+    finally:
+        db.close()
+
+    return RedirectResponse(url="/books-list", status_code=303)
 
 # if __name__ == "__main__":
 #     import uvicorn
