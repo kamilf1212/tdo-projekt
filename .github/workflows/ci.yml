@@ -1,72 +1,33 @@
-name: Testy CI/CD
+name: CI
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
-
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  test-app:
+  run-tests:
+    name: Testowanie aplikacji
     runs-on: ubuntu-latest
+    
     steps:
       - name: Pobranie kodu
         uses: actions/checkout@v4
 
-      - name: Konfiguracja Pythona 3.12
+      - name: Konfiguracja Pythona
         uses: actions/setup-python@v4
         with:
           python-version: "3.12"
 
-      - name: Instalacja zaleznosci
+      - name: Instalacja zależności
         run: |
           pip install -r requirements.txt
 
-      - name: Sprawdzanie bledow (Linting)
+      - name: Sprawdzanie jakości kodu (Linting)
         run: |
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-      - name: Uruchomienie testow
+      - name: Uruchomienie testów (Pytest)
         env:
           PYTHONPATH: .
         run: |
           pytest
-
-#czesć CD
-  build-and-push:
-      needs: test-app
-      if: github.event_name == 'push'
-      runs-on: ubuntu-latest
-      permissions:
-        contents: read
-        packages: write
-  
-      steps:
-        - name: Pobranie kodu
-          uses: actions/checkout@v4
-  
-        - name: Logowanie do GitHub Container Registry
-          uses: docker/login-action@v3
-          with:
-            registry: ${{ env.REGISTRY }}
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
-  
-        - name: Przygotowanie metadanych
-          id: meta
-          uses: docker/metadata-action@v5
-          with:
-            images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-            tags: type=raw,value=latest
-  
-        - name: Zbudowanie i wypchnięcie obrazu
-          uses: docker/build-push-action@v5
-          with:
-            context: .
-            push: true
-            tags: ${{ steps.meta.outputs.tags }}
-            labels: ${{ steps.meta.outputs.labels }}
