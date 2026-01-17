@@ -35,7 +35,7 @@ jobs:
 #czesć CD
   build-and-push:
       needs: test-app
-      if: github.event_name == 'push'
+      #if: github.event_name == 'push'
       runs-on: ubuntu-latest
       permissions:
         contents: read
