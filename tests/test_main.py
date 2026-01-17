@@ -39,7 +39,7 @@ def test_read_main():
 def test_create_and_read_book():
     response = client.post(
         "/add-book",
-        data={"title": "Test", "TestKtos": "Ttttt", "year": 2024},
+        data={"title": "Test", "author": "Ttttt", "year": 2024},
         follow_redirects=False
     )
     assert response.status_code == 303
