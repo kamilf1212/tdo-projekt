@@ -1,0 +1,33 @@
+name: Testy CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobranie kodu
+        uses: actions/checkout@v4
+
+      - name: Konfiguracja Pythona 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Instalacja zaleznosci
+        run: |
+          pip install -r requirements.txt
+
+      - name: Sprawdzanie bledow (Linting)
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      - name: Uruchomienie testow
+        env:
+          PYTHONPATH: .
+        run: |
+          pytest
