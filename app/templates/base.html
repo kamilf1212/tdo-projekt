@@ -8,11 +8,21 @@
 <body>
     <header>
         <h1>LibraryLite</h1>
+
         <nav>
             <a href="/">Home</a>
-            <a href="/books">Books (JSON)</a>
+            <a href="/books-list">Książki</a>
+
+            {% if request.cookies.get("user") %}
+                <a href="/my-loans">Moje wypożyczenia</a>
+                <a href="/logout">Wyloguj</a>
+            {% else %}
+                <a href="/login">Zaloguj</a>
+                <a href="/register">Rejestracja</a>
+            {% endif %}
         </nav>
     </header>
+
     <main>
         {% block content %}{% endblock %}
     </main>

@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.database import SessionLocal, engine
 from app import models
+from app.security import hash_password
 
 
 def init_db():
@@ -8,8 +9,22 @@ def init_db():
 
     db: Session = SessionLocal()
 
+    admin = db.query(models.User).filter_by(username="admin").first()
+
+    if not admin:
+        admin = models.User(
+            username="admin",
+            password_hash=hash_password("admin123"),
+            is_admin=True
+        )
+        db.add(admin)
+        db.commit()
+        print("Admin account created (admin / admin123)")
+    else:
+        print("Admin already exists")
+
     if db.query(models.Book).count() == 0:
-        sample_books = [
+        books = [
             models.Book(
                 title="The Pragmatic Programmer",
                 author="Andrew Hunt, David Thomas",
@@ -23,14 +38,14 @@ def init_db():
                 description="A handbook of agile software craftsmanship."
             ),
             models.Book(
-                title="Design Patterns: Elements of Reusable OO Software",
+                title="Design Patterns",
                 author="Gamma, Helm, Johnson, Vlissides",
                 year=1994,
-                description="The famous Gang of Four design patterns book."
+                description="Elements of Reusable Object-Oriented Software."
             ),
         ]
 
-        db.add_all(sample_books)
+        db.add_all(books)
         db.commit()
         print("Sample books inserted.")
     else:

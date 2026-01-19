@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Moje wypożyczenia</h2>
+
+{% if loans %}
+<table>
+    <tr>
+        <th>Tytuł</th>
+        <th>Autor</th>
+        <th>Wypożyczono</th>
+        <th>Akcja</th>
+    </tr>
+
+    {% for loan in loans %}
+    <tr>
+        <td>{{ loan.book.title }}</td>
+        <td>{{ loan.book.author }}</td>
+        <td>{{ loan.borrowed_at.strftime("%Y-%m-%d") }}</td>
+        <td>
+            <form method="post" action="/return/{{ loan.id }}">
+                <button type="submit">Oddaj</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Nie masz aktualnie wypożyczonych książek.</p>
+{% endif %}
+
+{% endblock %}

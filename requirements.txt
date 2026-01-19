@@ -10,3 +10,4 @@ pydantic~=2.12.5
 pytest
 httpx
 flake8
+passlib~=1.7.4

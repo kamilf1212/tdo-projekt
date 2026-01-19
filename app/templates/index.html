@@ -7,15 +7,10 @@
 <ul>
     <li><a href="/books">List of books (JSON API)</a></li>
     <li><a href="/books-list">View Books (HTML)</a></li>
-    <li><a href="/add-book">Add a new book (form)</a></li>
-</ul>
-
-<p>Possible TODO for the app:</p>
-<ul>
-    <li>Add CRUD operations</li>
-    <li>Build forms</li>
-    <li>Add authentication</li>
-    <li>Containerize the app</li>
-    <li>Deploy & monitor</li>
+    {% if user.is_admin %}
+    <li>
+      <a href="/add-book">Dodaj książkę</a>
+    </li>
+    {% endif %}
 </ul>
 {% endblock %}
