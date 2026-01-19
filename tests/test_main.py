@@ -1,6 +1,8 @@
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
+
+from app import models
 from app.main import app
 from app.database import Base
 from app.routers.books import get_db
@@ -21,6 +23,14 @@ def override_get_db():
         yield db
     finally:
         db.close()
+
+
+def override_admin_required():
+    return models.User(
+        id=1,
+        username="admin",
+        is_admin=True
+    )
 
 
 #Podmieniamy baze dannych
