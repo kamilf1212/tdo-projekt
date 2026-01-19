@@ -3,7 +3,7 @@ from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
 
 from app import models
-from app.main import app
+from app.main import app, admin_required
 from app.database import Base
 from app.routers.books import get_db
 
@@ -35,6 +35,7 @@ def override_admin_required():
 
 #Podmieniamy baze dannych
 app.dependency_overrides[get_db] = override_get_db
+app.dependency_overrides[admin_required] = override_admin_required
 
 client = TestClient(app)
 
